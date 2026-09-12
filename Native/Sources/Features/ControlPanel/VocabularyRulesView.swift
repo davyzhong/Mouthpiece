@@ -8,6 +8,7 @@ struct VocabularyRulesView: View {
 
     var body: some View {
         SettingsPage(title: "personalization.title", subtitle: "personalization.subtitle") {
+            CorrectionLearningSection(learning: environment.learning)
             SettingsSection(title: "personalization.dictionary") {
                 TermInputRow(
                     placeholder: "personalization.newTerm",

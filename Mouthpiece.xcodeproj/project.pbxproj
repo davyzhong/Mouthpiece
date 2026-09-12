@@ -9,11 +9,13 @@
 /* Begin PBXBuildFile section */
 		048C1C41BD00CB879A1F1807 /* LocalModelRuntimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F462A88170866B446AECBEDF /* LocalModelRuntimeTests.swift */; };
 		07408B987BBE686D4A2867C8 /* AssemblyAIRealtimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2400733301B8C6B62BBBBADE /* AssemblyAIRealtimeProvider.swift */; };
+		079E62AE96D969144BAC101E /* CorrectionLearningController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EA74E6D9F42B0C455FFCC2 /* CorrectionLearningController.swift */; };
 		0A440C120208A9FAA7026F3A /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D4C3234DFE8927E6B80953 /* AppLocalization.swift */; };
 		0AA230812A550B3677854703 /* DictationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25ADB4A2A92A60860ADDE97 /* DictationCoordinatorTests.swift */; };
 		0AC4A0D057AC1D5B184050EB /* provider-alibaba-cloud.svg in Resources */ = {isa = PBXBuildFile; fileRef = 4FF10FB8792E36433269C821 /* provider-alibaba-cloud.svg */; };
 		0CC9ECF7F562AD5316B0D744 /* DictationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60374F56B1400EFAA2E6ABC /* DictationCoordinator.swift */; };
 		0EC4D9AE76C4613A63CCA0CF /* provider-gemini.svg in Resources */ = {isa = PBXBuildFile; fileRef = EBF9512E0313324EAB4D27AF /* provider-gemini.svg */; };
+		13AEACD81A51544FBB83CC9B /* CorrectionLearning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98DE635938EC3C7780D6F4CF /* CorrectionLearning.swift */; };
 		16506CE0651229C235E6997F /* provider-volcengine.svg in Resources */ = {isa = PBXBuildFile; fileRef = 473B94E3083AC662E10BB2F3 /* provider-volcengine.svg */; };
 		1C251ED433E1ADD7BE0CCC97 /* AudioCaptureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3585937DFD74537CD06375 /* AudioCaptureService.swift */; };
 		2D95C800B8100F754AB4FEC6 /* VocabularyRulesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6AF4263364F99415FE81C5 /* VocabularyRulesView.swift */; };
@@ -21,6 +23,7 @@
 		321E53850470F38EB87BD3E4 /* AppEnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB05050047AEA5E7AF2A0F /* AppEnvironmentTests.swift */; };
 		38C6EAC44D32457CEBAAE9AE /* VolcengineRealtimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A1007A71A94BEFBAC33308 /* VolcengineRealtimeProvider.swift */; };
 		393DA3F6B2481CBC599F9828 /* HistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4296C56083431AF4D8B75F2 /* HistoryRepository.swift */; };
+		3D940BA72F241C85609C8468 /* CorrectionLearningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0975F93BD6026DB83BE66BA /* CorrectionLearningView.swift */; };
 		44384E8791662B41641112B2 /* HotkeyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE9307D1D6F3C430EB81C47 /* HotkeyService.swift */; };
 		4A474C3D5F03FAF0872D0C06 /* ObjCExceptionCatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = A70B7ABB4FAE5FC3F96EF40C /* ObjCExceptionCatcher.m */; };
 		4AADC71C2AD99C4B02C73EDD /* RealtimeSocketSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDAC59350B9390117359543 /* RealtimeSocketSession.swift */; };
@@ -30,6 +33,7 @@
 		4FFCB31EF517A1A0BD665495 /* SupervisedProcessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC3BCBDDF31A9E15195D511 /* SupervisedProcessTests.swift */; };
 		5114DA72C8727D9B4F23A72D /* provider-openai.svg in Resources */ = {isa = PBXBuildFile; fileRef = F33CE4BB76FFC238A6A35B30 /* provider-openai.svg */; };
 		53BE6F512E01624BE516DBF6 /* PersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C55850A84F69D2693F16674 /* PersistenceTests.swift */; };
+		56817C12453550C85E235C24 /* CorrectionCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6209B3EBF490B73FFCFBE527 /* CorrectionCapture.swift */; };
 		583C66018112909D4C31B399 /* mouthpiece-mark.svg in Resources */ = {isa = PBXBuildFile; fileRef = 5BBEF14EF7D7B5E4B7925B11 /* mouthpiece-mark.svg */; };
 		5CE5B3948AE7DBFC00EAB40F /* PrivacyDiagnosticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7041F0F70A5B0304F21B6BB6 /* PrivacyDiagnosticsView.swift */; };
 		5DD8CB5CA74DEF7E5FAC94E7 /* provider-assemblyai.png in Resources */ = {isa = PBXBuildFile; fileRef = 616849886AEB53652DF4F366 /* provider-assemblyai.png */; };
@@ -54,8 +58,10 @@
 		959207A8004EEA084B2FD23C /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA603181932CF2478C9EC907 /* KeychainStore.swift */; };
 		95ECF44D33840B29123C0005 /* ControlPanelComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70DD31A828E2E56F4EB1B602 /* ControlPanelComponents.swift */; };
 		9B9ACF7A4FFD525AB596CD1A /* CapsuleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21215E9A7E2E8B6EE98CA3CF /* CapsuleController.swift */; };
+		9BE02F56769EF416B5477B94 /* CorrectionCaptureLiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B283C2274A4190E8C84C3F9A /* CorrectionCaptureLiveTests.swift */; };
 		9E6B73D27BF5EAB22FAE3506 /* UpdateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F6EAB50116A2E22E1BEF9E2 /* UpdateController.swift */; };
 		9E9E292CD9916AB9F8B742ED /* SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4977AEE94F4AF686A40201B /* SettingsRepository.swift */; };
+		A240DA86F6370E4A21AE050D /* CorrectionLearningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FBB3D5CF2D1B61AFE97B55 /* CorrectionLearningTests.swift */; };
 		A354D63DB76A86C46ED59351 /* LocalModelCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F355B8755FE4FE25201F1ED0 /* LocalModelCatalog.swift */; };
 		AEF715A425F6589186EA6EA7 /* DictationCoordinator+Diagnostics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8993AF92B193FE1116FCF73F /* DictationCoordinator+Diagnostics.swift */; };
 		BAB55B4AB4A206574AC342C0 /* TranscriptionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD15DDB4974E8338A9223CBC /* TranscriptionProvider.swift */; };
@@ -128,9 +134,11 @@
 		5BC32D1B30840775D8ECF085 /* CredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialStore.swift; sourceTree = "<group>"; };
 		616849886AEB53652DF4F366 /* provider-assemblyai.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "provider-assemblyai.png"; sourceTree = "<group>"; };
 		61A78229C54CB604F1508042 /* BatchTranscriptionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchTranscriptionClient.swift; sourceTree = "<group>"; };
+		6209B3EBF490B73FFCFBE527 /* CorrectionCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionCapture.swift; sourceTree = "<group>"; };
 		6F6EAB50116A2E22E1BEF9E2 /* UpdateController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateController.swift; sourceTree = "<group>"; };
 		7041F0F70A5B0304F21B6BB6 /* PrivacyDiagnosticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyDiagnosticsView.swift; sourceTree = "<group>"; };
 		70DD31A828E2E56F4EB1B602 /* ControlPanelComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlPanelComponents.swift; sourceTree = "<group>"; };
+		74FBB3D5CF2D1B61AFE97B55 /* CorrectionLearningTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionLearningTests.swift; sourceTree = "<group>"; };
 		79667A472C6D2AB2632C64FB /* ObjCExceptionGuard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjCExceptionGuard.swift; sourceTree = "<group>"; };
 		7E3585937DFD74537CD06375 /* AudioCaptureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCaptureService.swift; sourceTree = "<group>"; };
 		7F767B388D685E79A58214F5 /* ObjCExceptionCatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjCExceptionCatcher.h; sourceTree = "<group>"; };
@@ -140,8 +148,10 @@
 		8993AF92B193FE1116FCF73F /* DictationCoordinator+Diagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DictationCoordinator+Diagnostics.swift"; sourceTree = "<group>"; };
 		8D12196A0053C4F520959AF3 /* ProviderErrorSanitizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderErrorSanitizer.swift; sourceTree = "<group>"; };
 		985AC5EB7663AEBC56A4E41F /* LocalModelRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalModelRuntime.swift; sourceTree = "<group>"; };
+		98DE635938EC3C7780D6F4CF /* CorrectionLearning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionLearning.swift; sourceTree = "<group>"; };
 		9F07BDA1719C968AE23A7997 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9F0AA63B360B006DB2405323 /* provider-anthropic.svg */ = {isa = PBXFileReference; path = "provider-anthropic.svg"; sourceTree = "<group>"; };
+		A0975F93BD6026DB83BE66BA /* CorrectionLearningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionLearningView.swift; sourceTree = "<group>"; };
 		A32ED6154EF45C286E3C807C /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		A4A1007A71A94BEFBAC33308 /* VolcengineRealtimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolcengineRealtimeProvider.swift; sourceTree = "<group>"; };
 		A70B7ABB4FAE5FC3F96EF40C /* ObjCExceptionCatcher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjCExceptionCatcher.m; sourceTree = "<group>"; };
@@ -149,6 +159,7 @@
 		AFB1FA0A318163DC8EBA246D /* DictationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationState.swift; sourceTree = "<group>"; };
 		B1501A6F849E3703BD3FAB3F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		B182DDF5D81617CECF2EE06C /* provider-groq.svg */ = {isa = PBXFileReference; path = "provider-groq.svg"; sourceTree = "<group>"; };
+		B283C2274A4190E8C84C3F9A /* CorrectionCaptureLiveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionCaptureLiveTests.swift; sourceTree = "<group>"; };
 		B355A151353D33A873E9C90E /* RealtimeSocketSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeSocketSessionTests.swift; sourceTree = "<group>"; };
 		B46BD5418BD14A71E9B04135 /* TextInsertionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInsertionService.swift; sourceTree = "<group>"; };
 		B65963C52779B6662A3496C1 /* AudioTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTests.swift; sourceTree = "<group>"; };
@@ -166,6 +177,7 @@
 		D992A8D85465C52531CBD002 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		DA603181932CF2478C9EC907 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
 		DEA3890075EF96CBF8C56D97 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		E0EA74E6D9F42B0C455FFCC2 /* CorrectionLearningController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionLearningController.swift; sourceTree = "<group>"; };
 		E25ADB4A2A92A60860ADDE97 /* DictationCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationCoordinatorTests.swift; sourceTree = "<group>"; };
 		E4296C56083431AF4D8B75F2 /* HistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRepository.swift; sourceTree = "<group>"; };
 		E60374F56B1400EFAA2E6ABC /* DictationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationCoordinator.swift; sourceTree = "<group>"; };
@@ -204,6 +216,8 @@
 			children = (
 				09EB05050047AEA5E7AF2A0F /* AppEnvironmentTests.swift */,
 				B65963C52779B6662A3496C1 /* AudioTests.swift */,
+				B283C2274A4190E8C84C3F9A /* CorrectionCaptureLiveTests.swift */,
+				74FBB3D5CF2D1B61AFE97B55 /* CorrectionLearningTests.swift */,
 				40DCD77EEE51E5CD93773591 /* DictationAndProviderTests.swift */,
 				E25ADB4A2A92A60860ADDE97 /* DictationCoordinatorTests.swift */,
 				22AC7898EDE23F6F4CC60717 /* InMemoryCredentialStore.swift */,
@@ -392,6 +406,7 @@
 			children = (
 				42E56BBE96DE36354A1C2355 /* AppPaths.swift */,
 				D992A8D85465C52531CBD002 /* AppSettings.swift */,
+				98DE635938EC3C7780D6F4CF /* CorrectionLearning.swift */,
 				5BC32D1B30840775D8ECF085 /* CredentialStore.swift */,
 				E4296C56083431AF4D8B75F2 /* HistoryRepository.swift */,
 				DA603181932CF2478C9EC907 /* KeychainStore.swift */,
@@ -422,6 +437,7 @@
 		CC8ACF2EB2AF04BBDC4C13C0 /* TextInsertion */ = {
 			isa = PBXGroup;
 			children = (
+				6209B3EBF490B73FFCFBE527 /* CorrectionCapture.swift */,
 				B46BD5418BD14A71E9B04135 /* TextInsertionService.swift */,
 			);
 			path = TextInsertion;
@@ -453,6 +469,7 @@
 				9F07BDA1719C968AE23A7997 /* AppDelegate.swift */,
 				C831708EAE57EACA8418A22C /* AppEnvironment.swift */,
 				82D4C3234DFE8927E6B80953 /* AppLocalization.swift */,
+				E0EA74E6D9F42B0C455FFCC2 /* CorrectionLearningController.swift */,
 				4DCBD2075D00E23850F2F254 /* DictationSessionModel.swift */,
 				202A5C104CA1D33343D7EB28 /* MouthpieceApp.swift */,
 			);
@@ -464,6 +481,7 @@
 			children = (
 				70DD31A828E2E56F4EB1B602 /* ControlPanelComponents.swift */,
 				C1827FCF96D30560F007B93C /* ControlPanelView.swift */,
+				A0975F93BD6026DB83BE66BA /* CorrectionLearningView.swift */,
 				010E09EF0048FE7224083DD8 /* DictationSettingsView.swift */,
 				D6AA4B39DCEBF7AC11249C86 /* HistoryView.swift */,
 				7041F0F70A5B0304F21B6BB6 /* PrivacyDiagnosticsView.swift */,
@@ -586,6 +604,8 @@
 			files = (
 				321E53850470F38EB87BD3E4 /* AppEnvironmentTests.swift in Sources */,
 				FAB1E10BBED423630CD1E836 /* AudioTests.swift in Sources */,
+				9BE02F56769EF416B5477B94 /* CorrectionCaptureLiveTests.swift in Sources */,
+				A240DA86F6370E4A21AE050D /* CorrectionLearningTests.swift in Sources */,
 				E4BB190875CFB4CF76D4EE64 /* DictationAndProviderTests.swift in Sources */,
 				0AA230812A550B3677854703 /* DictationCoordinatorTests.swift in Sources */,
 				8EFAF03070B5E53B645AC98F /* InMemoryCredentialStore.swift in Sources */,
@@ -613,6 +633,10 @@
 				9B9ACF7A4FFD525AB596CD1A /* CapsuleController.swift in Sources */,
 				95ECF44D33840B29123C0005 /* ControlPanelComponents.swift in Sources */,
 				4D2EFEB2F4185781B7272688 /* ControlPanelView.swift in Sources */,
+				56817C12453550C85E235C24 /* CorrectionCapture.swift in Sources */,
+				13AEACD81A51544FBB83CC9B /* CorrectionLearning.swift in Sources */,
+				079E62AE96D969144BAC101E /* CorrectionLearningController.swift in Sources */,
+				3D940BA72F241C85609C8468 /* CorrectionLearningView.swift in Sources */,
 				CF6921BB639B74645EAB9DEA /* CredentialStore.swift in Sources */,
 				BBFB3EA1322BA1862CAD2129 /* DebugLogStore.swift in Sources */,
 				6944071CAFC02BB0704CFFAD /* DeepgramRealtimeProvider.swift in Sources */,
@@ -730,7 +754,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 20105;
+				CURRENT_PROJECT_VERSION = 20200;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -744,7 +768,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 2.1.5;
+				MARKETING_VERSION = 2.2.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -828,7 +852,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 20105;
+				CURRENT_PROJECT_VERSION = 20200;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -848,7 +872,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 2.1.5;
+				MARKETING_VERSION = 2.2.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;

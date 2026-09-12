@@ -52,6 +52,14 @@ actor ReasoningService {
         return Self.applyReplacementRules(trimmed, rules: settings.terminologyProfile.replacementRules)
     }
 
+    func extractCorrectionTerms(samples: [CorrectionSample], excludedTerms: [String], settings: AppSettings) async throws -> [LearnedTerm] {
+        let prompt = try CorrectionBatch.prompt(samples: samples, excludedTerms: excludedTerms)
+        let operation = Task { try await self.request(prompt: prompt, settings: settings) }
+        let response = try await DictationCoordinator.reasoningWithTimeout(operation, timeout: .seconds(60))
+        try Task.checkCancellation()
+        return try CorrectionBatch.parse(response, samples: samples, excludedTerms: excludedTerms)
+    }
+
     // Literal, case-insensitive substring replacement. Longer keys win on
     // overlap so a more specific rule can supersede a shorter one; equal-
     // length keys sort lexicographically for determinism. `normalize()` on

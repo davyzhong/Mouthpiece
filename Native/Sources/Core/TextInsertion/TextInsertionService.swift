@@ -452,7 +452,7 @@ final class TextInsertionService {
         }
     }
 
-    private nonisolated static func raceWithTimeout<T: Sendable>(
+    nonisolated static func raceWithTimeout<T: Sendable>(
         _ timeout: DispatchTimeInterval,
         operation: @escaping @Sendable () -> T
     ) async -> T? {

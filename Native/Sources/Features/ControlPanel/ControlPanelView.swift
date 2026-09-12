@@ -81,6 +81,7 @@ struct ControlPanelView: View {
             }
         }
         .background(Color(nsColor: .windowBackgroundColor))
+        .background(CorrectionEditorHost(learning: environment.learning))
         .onAppear { ControlPanelWindowAccess.open = openWindow }
         .alert(
             AppLocalization.string("common.error", language: environment.settings.uiLanguage),

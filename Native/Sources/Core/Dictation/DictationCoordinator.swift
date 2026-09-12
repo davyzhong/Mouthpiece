@@ -1,4 +1,5 @@
 import Foundation
+import Carbon
 
 // Test seam: the local transcription edge runs out-of-process (whisper /
 // parakeet / qwen servers), which unit tests cannot launch. These are the only
@@ -37,6 +38,7 @@ actor DictationCoordinator {
     // unit tests; nil (the default) keeps the production provider wiring.
     private let realtimeProviderOverride: (any RealtimeTranscriptionProvider)?
     private let onSnapshot: @MainActor @Sendable (DictationSnapshot) -> Void
+    private let onTranscriptionSaved: (@MainActor @Sendable (TranscriptionRecord, TextInsertionTarget?, CorrectionTextSnapshot?) -> Void)?
 
     private var machine = DictationStateMachine()
     private var target: TextInsertionTarget?
@@ -80,6 +82,7 @@ actor DictationCoordinator {
         localRuntime: any LocalTranscriptionRuntime = LocalModelRuntime(),
         reasoningService: ReasoningService? = nil,
         realtimeProviderOverride: (any RealtimeTranscriptionProvider)? = nil,
+        onTranscriptionSaved: (@MainActor @Sendable (TranscriptionRecord, TextInsertionTarget?, CorrectionTextSnapshot?) -> Void)? = nil,
         onSnapshot: @escaping @MainActor @Sendable (DictationSnapshot) -> Void
     ) {
         self.audio = audio
@@ -98,6 +101,7 @@ actor DictationCoordinator {
         self.reasoning = reasoningService ?? ReasoningService(keychain: keychain)
         self.realtimeProviderOverride = realtimeProviderOverride
         self.onSnapshot = onSnapshot
+        self.onTranscriptionSaved = onTranscriptionSaved
     }
 
     func warmup(settings: AppSettings) async {
@@ -445,9 +449,15 @@ actor DictationCoordinator {
             }
 
             let completionPhase: DictationPhase
+            var correctionBefore: CorrectionTextSnapshot?
             if activeSettings.automaticallyPasteTranscription, let target {
                 try machine.transition(to: .inserting, sessionID: sessionID)
                 await publish()
+                if activeSettings.correctionLearningEnabled, !activeSettings.translationEnabled,
+                   !sensitivity.blocksPersistence {
+                    correctionBefore = await TextInsertionService.correctionSnapshot(for: target)
+                    guard isCurrent(sessionID, phase: .inserting) else { return }
+                }
                 try await insertOrReportSecureInputBlock(finalText, into: target, sessionID: sessionID)
                 completionPhase = .inserting
             } else {
@@ -466,7 +476,7 @@ actor DictationCoordinator {
             // allowed insertion into a password manager still got the password
             // written to the history database in clear text. The clipboard stays
             // tied to the insertion policy the user opted into above.
-            try await persistIfAllowed(text: finalText, rawText: normalizedRawText)
+            try await persistIfAllowed(text: finalText, rawText: normalizedRawText, correctionBefore: correctionBefore)
             guard isCurrent(sessionID, phase: completionPhase) else { return }
             try machine.transition(to: .completed, sessionID: sessionID)
             await logger.write(.info, "Dictation session completed", sessionID: sessionID)
@@ -495,9 +505,14 @@ actor DictationCoordinator {
 
     // P2-10: history is a gated sink, not an unconditional one. Kept as its own
     // method so stop() states the intent in one line and keeps its complexity.
-    private func persistIfAllowed(text: String, rawText: String) async throws {
+    private func persistIfAllowed(text: String, rawText: String, correctionBefore: CorrectionTextSnapshot?) async throws {
         guard !sensitivity.blocksPersistence else { return }
-        _ = try await history.save(text: text, rawText: rawText)
+        let record = try await history.save(text: text, rawText: rawText)
+        if activeSettings.correctionLearningEnabled, !activeSettings.translationEnabled,
+           !IsSecureEventInputEnabled(),
+           target.map({ !TextInsertionService.isSensitive($0) }) ?? true {
+            await onTranscriptionSaved?(record, target, correctionBefore)
+        }
     }
 
     func cancel() async {

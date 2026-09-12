@@ -44,7 +44,9 @@ struct HistoryView: View {
                                 item: item,
                                 onCopyProcessed: { copy(item.text) },
                                 onCopyOriginal: { rawText in copy(rawText) },
-                                onDelete: { delete(item) }
+                                onDelete: { delete(item) },
+                                onCorrect: environment.settings.correctionLearningEnabled
+                                    ? { environment.learning.editCorrection(item) } : nil
                             )
                         }
                         if environment.hasMoreHistory {
@@ -131,6 +133,7 @@ private struct HistoryCard: View {
     let onCopyProcessed: () -> Void
     let onCopyOriginal: (String) -> Void
     let onDelete: () -> Void
+    var onCorrect: (() -> Void)? = nil
 
     private var originalText: String? {
         guard let rawText = item.rawText?.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -144,6 +147,10 @@ private struct HistoryCard: View {
                 Image(systemName: "clock")
                 Text(item.timestamp.formatted(date: .long, time: .shortened))
                 Spacer()
+                if let onCorrect {
+                    Button("learning.correct", action: onCorrect)
+                        .buttonStyle(.bordered)
+                }
                 Button(role: .destructive, action: onDelete) {
                     Image(systemName: "trash")
                         .frame(

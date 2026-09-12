@@ -55,12 +55,14 @@ final class AppEnvironment: ObservableObject {
     // `objectWillChange` and put the whole control panel back on the 50 Hz
     // invalidation path this split exists to remove.
     let session = DictationSessionModel()
-    let settingsRepository = SettingsRepository()
+    let settingsRepository: SettingsRepository
     let keychain = KeychainStore()
     let audio = AudioCaptureService()
     let audioCues = AudioCueService()
     let permissionsService = PermissionService()
     let insertion = TextInsertionService()
+    let learning = CorrectionLearningController()
+    let correctionHotkey = HotkeyService()
     let capsule = CapsuleController()
     let hotkey = HotkeyService()
     let translationHotkey = HotkeyService(swallowMatchedEvents: true)
@@ -93,8 +95,9 @@ final class AppEnvironment: ObservableObject {
     private var historyQuery = ""
     private var historyLoadRevision = 0
 
-    init(bootstrap: Bool = true, autoMarkReady: Bool = true) {
-        if settingsRepository.loadFailed {
+    init(bootstrap: Bool = true, autoMarkReady: Bool = true, settingsRepository: SettingsRepository? = nil) {
+        self.settingsRepository = settingsRepository ?? SettingsRepository()
+        if self.settingsRepository.loadFailed {
             reportStartupFailure(SettingsRepositoryError.corruptedStore.localizedDescription)
         }
         toggleDictationObserver = NotificationCenter.default.addObserver(
@@ -125,6 +128,8 @@ final class AppEnvironment: ObservableObject {
         do {
             let previous = settings
             settings = try settingsRepository.update { $0 = next }
+            learning.settings = settings
+            updateCorrectionHotkey()
             let changes = RuntimeSettingsChanges(previous: previous, current: settings)
             if changes.debugLogging {
                 synchronizeDebugLogging(settings.debugLoggingEnabled)
@@ -197,6 +202,7 @@ final class AppEnvironment: ObservableObject {
                 guard let history = self?.history else { return }
                 try await history.clear()
                 try await self?.reloadHistory()
+                await self?.learning.refresh()
             } catch {
                 self?.report(error)
             }
@@ -210,6 +216,7 @@ final class AppEnvironment: ObservableObject {
                 guard let history = self?.history else { return }
                 try await history.delete(id: id)
                 try await self?.reloadHistory()
+                await self?.learning.refresh()
             } catch {
                 self?.report(error)
             }
@@ -308,6 +315,8 @@ final class AppEnvironment: ObservableObject {
         // shutdown fires. Flushing first — before any awaits — persists the
         // pending blob synchronously so it survives termination.
         settingsRepository.flush()
+        correctionHotkey.stop()
+        await learning.shutdown()
         // P2-14: a quick Cmd+Q used to reach `coordinator.shutdown()` below,
         // which cancels the frame task, resets the state machine and drops
         // the retained PCM — the sentence the user was still speaking
@@ -532,8 +541,15 @@ final class AppEnvironment: ObservableObject {
             try ensureInitializationCanContinue()
             try AppPaths.prepareApplicationSupport()
             settings = settingsRepository.load()
+            learning.settings = settings
             let history = try HistoryRepository()
             self.history = history
+            let learningReasoning = ReasoningService(keychain: keychain)
+            do {
+                try await learning.configure(history: history) { samples, excluded, settings in
+                    try await learningReasoning.extractCorrectionTerms(samples: samples, excludedTerms: excluded, settings: settings)
+                }
+            } catch { report(error) }
             let logger = DebugLogStore(enabled: settings.debugLoggingEnabled)
             self.logger = logger
             try? await logger.prune()
@@ -564,7 +580,11 @@ final class AppEnvironment: ObservableObject {
                 keychain: keychain,
                 logger: logger,
                 insertion: insertion,
-                capsule: capsule
+                capsule: capsule,
+                onTranscriptionSaved: { [weak self] record, target, before in
+                    guard let self, !self.isShuttingDown else { return }
+                    self.learning.receive(record, target: target, before: before)
+                }
             ) { [weak self] snapshot in
                 // P2-6: the ~50 Hz write site. Writing the snapshot into
                 // `session` (its own ObservableObject) keeps the per-frame
@@ -572,10 +592,12 @@ final class AppEnvironment: ObservableObject {
                 // coarse follow-up below stays here because it only fires on
                 // real phase/session transitions.
                 self?.session.apply(snapshot)
+                self?.learning.isDictating = snapshot.phase.isActive
                 self?.escapeHotkey.setSwallowArmed(snapshot.phase.isActive)
             }
             self.coordinator = coordinator
             hotkey.onPress = { [weak self] in self?.handleHotkeyPress() }
+            correctionHotkey.onPress = { [weak self] in self?.learning.captureSelectedCorrection() }
             hotkey.onRelease = { [weak self] in self?.handleHotkeyRelease() }
             escapeHotkey.onPress = { [weak self] in self?.handleEscape(53) }
             escapeHotkey.setSwallowArmed(false)
@@ -790,6 +812,7 @@ final class AppEnvironment: ObservableObject {
     }
 
     private func updateHotkeyRegistrations() {
+        updateCorrectionHotkey()
         updateEscapeHotkey()
         guard settings.onboardingCompleted, permissions.accessibility else {
             hotkey.stop()
@@ -806,6 +829,16 @@ final class AppEnvironment: ObservableObject {
             return
         }
         updateTranslationHotkey()
+    }
+
+    private func updateCorrectionHotkey() {
+        guard !isShuttingDown, settings.onboardingCompleted, permissions.accessibility,
+              settings.correctionLearningEnabled else {
+            correctionHotkey.stop()
+            return
+        }
+        do { try correctionHotkey.update(key: "Command+Option+Shift+L") }
+        catch { report(error) }
     }
 
     private func updateTranslationHotkey() {

@@ -139,6 +139,7 @@ actor HistoryRepository {
         deleted += Int(sqlite3_changes(database))
 
         guard deleted > 0 else { return 0 }
+        try scrubLearningEvidence()
         // P1-8: 仅在真实发生删除时发一次；VACUUM 报错不吞掉观察点。
         pruneLogger?("History prune removed \(deleted) records")
         prunedRowsSinceVacuum += deleted
@@ -188,6 +189,7 @@ actor HistoryRepository {
         defer { sqlite3_finalize(statement) }
         sqlite3_bind_int64(statement, 1, id)
         try stepDone(statement)
+        try scrubLearningEvidence()
     }
 
     func restore(_ record: TranscriptionRecord) throws {
@@ -208,6 +210,7 @@ actor HistoryRepository {
 
     func clear() throws {
         try execute("DELETE FROM transcriptions")
+        try scrubLearningEvidence()
         // P1-7: DELETE 已按 secure_delete=ON 就地清零本次删除的页面，但 WAL 里的
         // 历史 INSERT 帧和早于本修复的 freelist 页仍是明文。checkpoint(TRUNCATE)
         // 把待写帧回写主库并把 -wal 截断为 0 字节；随后 VACUUM 重写整库覆盖历史
@@ -330,6 +333,19 @@ actor HistoryRepository {
               created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
             """)
+        try execute(database, """
+            CREATE TABLE IF NOT EXISTS correction_samples (
+              history_id INTEGER PRIMARY KEY REFERENCES transcriptions(id) ON DELETE CASCADE,
+              payload TEXT NOT NULL,
+              processed INTEGER NOT NULL DEFAULT 0
+            )
+            """)
+        try execute(database, """
+            CREATE TABLE IF NOT EXISTS learned_terms (
+              term_key TEXT PRIMARY KEY,
+              payload TEXT NOT NULL
+            )
+            """)
     }
 
     private static func columnNames(_ database: OpaquePointer?, table: String) throws -> Set<String> {
@@ -384,6 +400,121 @@ actor HistoryRepository {
 
     private func currentError() -> HistoryRepositoryError {
         .sqlite(message: database.map { String(cString: sqlite3_errmsg($0)) } ?? "SQLite error")
+    }
+}
+
+extension HistoryRepository {
+    func correctionSamples(pendingOnly: Bool = true) throws -> [CorrectionSample] {
+        try learningPayloads("SELECT payload FROM correction_samples \(pendingOnly ? "WHERE processed = 0" : "") ORDER BY history_id", as: CorrectionSample.self)
+    }
+
+    func saveCorrectionSample(_ sample: CorrectionSample) throws {
+        // Deleted history must not be resurrected by a late capture callback.
+        guard let record = try? record(id: sample.id), record.text == sample.original else { return }
+        guard sample.original.utf16.count <= 16_000,
+              (sample.corrected?.utf16.count ?? 0) <= 16_000 else {
+            throw CorrectionLearningError.invalidCorrection
+        }
+        let statement = try prepare("""
+            INSERT INTO correction_samples (history_id, payload, processed) VALUES (?, ?, 0)
+            ON CONFLICT(history_id) DO UPDATE SET payload = excluded.payload, processed = 0
+            """)
+        defer { sqlite3_finalize(statement) }
+        sqlite3_bind_int64(statement, 1, sample.id)
+        let json = String(decoding: try JSONEncoder().encode(sample), as: UTF8.self)
+        sqlite3_bind_text(statement, 2, json, -1, Self.transient)
+        try stepDone(statement)
+    }
+
+    func learnedTerms() throws -> [LearnedTerm] {
+        try learningPayloads("SELECT payload FROM learned_terms ORDER BY term_key", as: LearnedTerm.self)
+    }
+
+    func saveLearnedTerm(_ term: LearnedTerm) throws {
+        let statement = try prepare("INSERT OR REPLACE INTO learned_terms (term_key, payload) VALUES (?, ?)")
+        defer { sqlite3_finalize(statement) }
+        let json = String(decoding: try JSONEncoder().encode(term), as: UTF8.self)
+        sqlite3_bind_text(statement, 1, term.id, -1, Self.transient)
+        sqlite3_bind_text(statement, 2, json, -1, Self.transient)
+        try stepDone(statement)
+    }
+
+    /// Commit the batch cursor and candidates together; newer edits invalidate old results.
+    func finishCorrectionBatch(_ samples: [CorrectionSample], terms: [LearnedTerm]) throws -> Bool {
+        try execute("BEGIN IMMEDIATE TRANSACTION")
+        do {
+            let pending = try correctionSamples()
+            guard samples.allSatisfy({ sample in pending.contains { $0.id == sample.id && $0.revision == sample.revision } }) else {
+                try execute("ROLLBACK")
+                return false
+            }
+            let existing = try learnedTerms()
+            for var term in terms {
+                if let prior = existing.first(where: { $0.id == term.id }) {
+                    guard prior.status == "pending" else { continue }
+                    let ids = Set(prior.evidence.map(\.sampleID))
+                    term.evidence = Array((prior.evidence + term.evidence.filter { !ids.contains($0.sampleID) }).prefix(5))
+                }
+                try saveLearnedTerm(term)
+            }
+            let statement = try prepare("UPDATE correction_samples SET processed = 1 WHERE history_id = ?")
+            defer { sqlite3_finalize(statement) }
+            for sample in samples {
+                sqlite3_reset(statement)
+                sqlite3_bind_int64(statement, 1, sample.id)
+                try stepDone(statement)
+            }
+            try execute("COMMIT")
+            return true
+        } catch {
+            try? execute("ROLLBACK")
+            throw error
+        }
+    }
+
+    func recoverCorrectionSessions() throws {
+        for var sample in try correctionSamples() where !sample.ready {
+            sample.ready = true
+            sample.revision = UUID()
+            try saveCorrectionSample(sample)
+        }
+    }
+
+    func clearCorrectionLearning() throws {
+        try execute("BEGIN IMMEDIATE TRANSACTION")
+        do {
+            try execute("DELETE FROM correction_samples")
+            try execute("DELETE FROM learned_terms")
+            try execute("COMMIT")
+        } catch {
+            try? execute("ROLLBACK")
+            throw error
+        }
+        try? execute("PRAGMA wal_checkpoint(TRUNCATE)")
+    }
+
+    private func scrubLearningEvidence() throws {
+        let surviving = Set(try correctionSamples(pendingOnly: false).map(\.id))
+        for var term in try learnedTerms() {
+            term.evidence.removeAll { !surviving.contains($0.sampleID) }
+            if term.evidence.isEmpty && term.status == "pending" { term.status = "ignored" }
+            try saveLearnedTerm(term)
+        }
+    }
+
+    private func learningPayloads<T: Decodable>(_ sql: String, as: T.Type) throws -> [T] {
+        let statement = try prepare(sql)
+        defer { sqlite3_finalize(statement) }
+        var values: [T] = []
+        while true {
+            switch sqlite3_step(statement) {
+            case SQLITE_ROW:
+                guard let text = sqlite3_column_text(statement, 0) else { throw currentError() }
+                values.append(try JSONDecoder().decode(T.self, from: Data(String(cString: text).utf8)))
+            case SQLITE_DONE: return values
+            default: throw currentError()
+            }
+        }
     }
 }
 

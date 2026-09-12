@@ -105,6 +105,9 @@ struct AppSettings: Codable, Equatable, Sendable {
     var translationTargetLanguage = ""
 
     var terminologyProfile = TerminologyProfile()
+    var correctionLearningEnabled = false
+    var correctionLearningSchedule = "count"
+    var correctionLearningBatchSize = 50
     var customPrompt = ""
     var sensitiveAppProtectionEnabled = true
     var sensitiveAppBlockInsertion = true
@@ -150,6 +153,10 @@ struct AppSettings: Codable, Equatable, Sendable {
             translationEnabled = false
         }
         terminologyProfile.normalize()
+        if !["count", "daily"].contains(correctionLearningSchedule) {
+            correctionLearningSchedule = "count"
+        }
+        correctionLearningBatchSize = max(10, min(100, correctionLearningBatchSize))
     }
 
     private static func normalizedURL(_ value: String, fallback: String) -> String {

@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-09-12
+
+### Added
+
+- 新增可选的个人纠错学习：在支持的 macOS 输入框中有界跟踪本次听写后的修改，词库页展示捕获状态；不可靠的控件和终端可从历史补充纠正稿，或在原应用选中纠正后的片段按 `⌘⌥⇧L` 核对后保存。全程以软件最终输出与用户纠正稿为依据，不把 ASR 到 LLM 的整理差异当作人工纠正。
+- 纠正记录只在本地累计，默认每 50 次已完成转写批量归纳，可设为 10–100 次或按天处理；同一请求包含未修改记录作为上下文，候选必须有真实纠正证据。按天模式在应用运行时处理以前日期的记录，每次最多 100 条。复用当前智能处理模型，提供手动归纳和失败重试；网络失败、取消或记录变化不会错误推进已处理批次。
+- 新增候选词的归类、来源原句查看、编辑后确认、批量收录、忽略与恢复，以及独立的学习数据清除。确认的词复用现有 ASR 热词及 LLM 词库通路，不自动生成全局替换规则。新增持久化迁移、批次边界、Unicode 片段定位、证据验证、并发清理与界面渲染测试。
+- Added opt-in personal correction learning with bounded macOS input-field tracking, a History correction editor, and a `⌘⌥⇧L` selected-text review shortcut. Learning compares final software output with user edits, not ASR-to-LLM rewrites.
+- Corrections accumulate locally and are analyzed together after 50 completed dictations by default (configurable from 10 to 100), or in daily batches of up to 100 earlier-day records while the app runs. Unchanged records provide context only. Batches reuse the configured text-processing model and remain pending after failed, cancelled or stale requests.
+- Added categorized suggestions, source evidence, editable approval, bulk acceptance, ignore/restore and learning-data deletion. Approved vocabulary uses existing ASR/LLM vocabulary paths without creating automatic global replacements. Added persistence, scheduling, Unicode anchoring, evidence validation, cleanup-race and UI-rendering coverage.
+
 ## [2.1.5] - 2026-09-06
 
 ### Fixed
