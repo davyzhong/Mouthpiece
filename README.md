@@ -1,97 +1,407 @@
-<div align="center">
-  <img src="docs/assets/readme/mouthpiece-icon.png" width="128" alt="Mouthpiece 图标" />
-
-  <h1>Mouthpiece</h1>
-
-  <p>
-    纯原生 macOS 语音听写工具。<br />
-    按下快捷键，说话，文本就会自动出现在你正在使用的应用中。
-  </p>
-
-  <p>
-    <a href="https://github.com/NotWizard/Mouthpiece/releases/latest">
-      <img src="https://img.shields.io/github/v/release/NotWizard/Mouthpiece?style=flat-square&color=1677ff" alt="最新版本" />
-    </a>
-    <a href="https://github.com/NotWizard/Mouthpiece/actions/workflows/ci.yml">
-      <img src="https://github.com/NotWizard/Mouthpiece/actions/workflows/ci.yml/badge.svg" alt="构建状态" />
-    </a>
-    <img src="https://img.shields.io/badge/macOS-15%2B-111111?style=flat-square&logo=apple&logoColor=white" alt="macOS 15 及以上" />
-    <img src="https://img.shields.io/badge/Swift-6.0-F05138?style=flat-square&logo=swift&logoColor=white" alt="Swift 6" />
-    <a href="LICENSE">
-      <img src="https://img.shields.io/github/license/NotWizard/Mouthpiece?style=flat-square&color=2ea44f" alt="MIT License" />
-    </a>
-  </p>
-
-  <p>
-    <a href="https://github.com/NotWizard/Mouthpiece/releases/latest"><strong>下载最新版本</strong></a>
-    ·
-    <a href="#快速开始">快速开始</a>
-    ·
-    <a href="README.en.md">English</a>
-  </p>
-</div>
+---
+name: Mouthpiece
+description: Cross-platform desktop dictation for macOS, Windows, and Linux. BYOK by default — pick your own transcription (Alibaba Bailian / Deepgram / Soniox) and reasoning (Cerebras / Mercury / Groq) providers, or run fully local with whisper.cpp and sherpa-onnx.
+license: MIT
+homepage: https://github.com/NotWizard/Mouthpiece
+platforms:
+  - macOS (Intel + Apple Silicon)
+  - Windows 10/11
+  - Linux (AppImage, deb, rpm, tar.gz)
+language: JavaScript / TypeScript (Electron, React)
+model: gpt-4 / claude-sonnet / gemini-2.5
+intent: code-generation / question-answering / agent-tool
+capabilities:
+  - install
+  - quickstart
+  - build
+  - byok
+  - troubleshoot
+tags:
+  - electron
+  - react
+  - typescript
+  - dictation
+  - speech-to-text
+  - whisper-cpp
+  - sherpa-onnx
+  - bailian
+  - deepgram
+  - soniox
+  - cross-platform
+  - byok
+  - realtime
+  - i18next
+---
 
 <p align="center">
-  <img src="docs/assets/readme/mouthpiece-hero.png" width="1200" alt="Mouthpiece 当前原生控制面板与首次引导" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="src/assets/icon.png" />
+    <img src="src/assets/icon.png" alt="Mouthpiece logo — a microphone crossed with a stylized speech bubble" width="128" />
+  </picture>
 </p>
 
-## 什么是 Mouthpiece？
+<div align="center">
 
-Mouthpiece 是一款专为 macOS 打造的语音听写应用。无论你正在写邮件、聊天、记录笔记还是编写文档，只需使用全局快捷键开始说话，Mouthpiece 就能完成语音识别、可选的文本整理与翻译，并将结果插入当前应用。
+# Mouthpiece
 
-应用使用 Swift、SwiftUI、AppKit 和 AVFoundation 构建，不包含 Electron、Chromium、React 或 Node.js runtime。你可以在本机运行语音识别，也可以连接自己选择的云服务。
+**Cross-platform desktop dictation that keeps your hands off the keyboard — BYOK by default, fully local on demand.**
 
-## 核心功能
+Hotkey → speak → text lands where your cursor was.
 
-- **随处听写**：在支持文本输入的 macOS 应用中使用全局快捷键录音并自动插入结果。
-- **纯原生体验**：原生窗口、菜单栏、快捷键、音频采集和文本插入，空闲时几乎不占用 CPU 或 GPU。
-- **本地或云端识别**：支持本地 Whisper、Parakeet 和 Qwen ASR，也可连接百炼、火山引擎、OpenAI、Deepgram、Soniox、AssemblyAI、Groq、Mistral 及兼容服务。
-- **实时听写胶囊**：显示录音状态、音量、实时文本和错误，并适配多显示器、Spaces 与全屏应用。
-- **整理与翻译**：支持独立翻译快捷键、自定义 Prompt、个人词典和多种文本处理服务。
-- **完整听写控制**：支持按住说话、点击切换、自动判断、Escape 取消、自动粘贴、剪贴板保留和听写时暂停媒体。
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/macOS%20%7C%20Windows%20%7C%20Linux-3%20platforms-lightgrey)](https://github.com/NotWizard/Mouthpiece/releases)
+[![Version](https://img.shields.io/badge/version-1.1.6-success)](https://github.com/NotWizard/Mouthpiece/releases)
+[![Fork](https://img.shields.io/badge/upstream-OpenWhispr%20%2B%20VoiceInk-informational)](#-upstream--references)
+[![Security](https://img.shields.io/badge/security-policy-lightgrey)](SECURITY.md)
 
-## 安装
+**Languages**: [English](./README.md) · [中文](./README.zh.md)
 
-### 系统要求
+[Install](#-install) · [Quick Start](#-quick-start) · [Features](#-features) · [Architecture](#-architecture) · [BYOK](#-byok--what-it-means-here) · [Contributing](#-contributing)
 
-- macOS 15 Sequoia 或 macOS 26 Tahoe
-- Apple Silicon 或 Intel Mac
-- 麦克风权限
-- 辅助功能权限，用于全局快捷键和自动插入文本
+</div>
 
-Mouthpiece 2.0 起仅提供 macOS 版本，不再维护 Windows、Linux 或 macOS 14 及更早版本。
+---
 
-### 下载
+> A community continuation of **OpenWhispr** and **VoiceInk** — focused on reliable paste-fallback, a real waveform in the floating capsule, dictionary feed-back, and explicit **BYOK** provider integrations (Alibaba Bailian / Deepgram / Soniox + OpenAI-compatible reasoning).
 
-1. 前往 [GitHub Releases](https://github.com/NotWizard/Mouthpiece/releases/latest)。
-2. 根据 Mac 架构下载对应的 DMG。
-3. 打开 DMG，将 `Mouthpiece.app` 拖入“应用程序”文件夹。
-4. 首次打开时按照引导授予麦克风和辅助功能权限。
+---
 
-> [!NOTE]
-> Mouthpiece 使用稳定的自签名 macOS 身份，目前没有 Apple notarization。手动下载 DMG 后，首次打开会被 macOS 拦截：请前往「系统设置 → 隐私与安全性」，在“安全性”区域点击“仍要打开”，再确认打开一次即可。（自 macOS 15 起，右键点按应用再选“打开”对未公证应用已不再生效。）
+## ✨ Why Mouthpiece
 
-### 使用 Homebrew 安装
+- **🔌 BYOK by default** — you supply the API key, you pay the provider, you keep the data flow under your control. No subscription, no hosted SaaS lock-in.
+- **🌍 Three platforms, one codebase** — Electron shell packages for macOS (.dmg/.zip), Windows (NSIS + portable .exe), and Linux (AppImage / .deb / .rpm / .tar.gz).
+- **🎯 Floating capsule with a real waveform** — the recording indicator pulses with your actual microphone level, not a stock animation.
+- **🧠 Live streaming transcript** — single-line continuous scroll while speaking, smooth handoff into `Processing...` afterward.
+- **🔁 Paste fall-back that doesn't fight you** — when the system judges pasting unsafe (Terminal password prompts, 1Password vaults, password fields), the text stays on the clipboard for `⌘V` / `Ctrl+V`.
+- **📒 Dictionary that learns from corrections** — accepted edits feed back into the dictionary; the next session recognizes the term on the first try.
+- **🪶 Three first-class cloud ASR providers** — Alibaba Bailian, Deepgram, and Soniox are independent cards with their own keys, models, and batch vs realtime toggles.
 
-也可以通过 Homebrew 直接安装：
+---
+
+## 🚀 Install
+
+### macOS
 
 ```bash
-brew install --cask NotWizard/mouthpiece/mouthpiece
+# Recommended: download the signed .dmg from Releases
+open ~/Downloads/Mouthpiece-1.1.6-mac.dmg
+# Drag Mouthpiece.app to /Applications as usual.
 ```
 
-### 自动更新
+### Windows
 
-安装后无需手动升级：新版本会通过应用内置的自动更新（Sparkle）提示并完成升级。上述手动放行仅首次安装时需要。
+```powershell
+# Recommended: download the NSIS installer from Releases
+# Double-click Mouthpiece-Setup-1.1.6.exe and follow the prompts.
+# It will create Start Menu + Desktop shortcuts.
+```
 
-## 快速开始
+### Linux
 
-1. 安装并打开 Mouthpiece。
-2. 按照首次引导授予麦克风和辅助功能权限。
-3. 选择本地语音识别，或配置一个云端语音服务。
-4. 设置听写快捷键和触发方式。
-5. 在任意文本输入位置按下快捷键，说话，然后停止录音。
-6. Mouthpiece 会识别语音，并根据设置自动整理、复制或插入结果。
+```bash
+# AppImage (any distro)
+chmod +x Mouthpiece-1.1.6-linux-x86_64.AppImage
+./Mouthpiece-1.1.6-linux-x86_64.AppImage
+# Or: install the .deb (Debian/Ubuntu), .rpm (Fedora/RHEL), or .tar.gz archive.
+```
 
-## License
+### From source (any platform)
 
-Mouthpiece 以 [MIT License](LICENSE) 开源。
+```bash
+git clone https://github.com/NotWizard/Mouthpiece.git
+cd Mouthpiece
+npm install
+npm run dev          # development with hot reload
+```
+
+> First run will prompt for microphone permission and Accessibility (macOS) / permission to run as background input monitor (Windows / Linux).
+
+---
+
+## ⚡ Quick Start
+
+### 30 seconds — boot the desktop app
+
+After installing the binary, double-click the app. The tray icon appears.
+
+### 60 seconds — first transcription
+
+1. Open the Control Panel from the tray icon.
+2. **Set your hotkey** (default is `` ` `` — backtick; pick whatever suits your layout).
+3. In **Transcription**, pick a provider:
+   - `Local · whisper.cpp` — fully offline, no key needed.
+   - `Alibaba Bailian` — paste a DashScope API key, optionally enable realtime.
+   - `Deepgram` / `Soniox` — same flow, paste the relevant key.
+4. *(Optional)* In **Reasoning**, set a Cerebras / Mercury / Groq OpenAI-compatible endpoint to polish transcripts.
+5. Press the hotkey, speak, release. The transcript appears at your cursor.
+
+> **Provider setup walkthroughs**: [`LOCAL_WHISPER_SETUP.md`](LOCAL_WHISPER_SETUP.md) (offline mode), [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) (general), [`WINDOWS_TROUBLESHOOTING.md`](WINDOWS_TROUBLESHOOTING.md).
+
+---
+
+## 📸 Visual Tour
+
+> ⚠️ Real screenshots are queued as `[TODO]` placeholders. Until then, run the app and drop real PNGs into `.github/screenshots/` — placeholders will resolve automatically.
+
+### Tray + floating capsule
+
+<p align="center">
+  <a href=".github/screenshots/tray-icon.png"><img src="src/assets/icon.png" width="96" alt="Mouthpiece tray icon — microphone crossed with a stylized speech bubble"></a>
+  <a href=".github/screenshots/floating-capsule.png"><img src=".github/screenshots/floating-capsule.png" width="320" alt="Floating recording capsule: translucent rounded panel pinned to the cursor, live waveform at the top, single-line transcript scrolling below."></a>
+</p>
+<p align="center"><sub><em>[TODO: tray-icon.png] · [TODO: floating-capsule.png]</em></sub></p>
+
+### Control panel + provider settings
+
+<p align="center">
+  <a href=".github/screenshots/control-panel.png"><img src=".github/screenshots/control-panel.png" width="320" alt="Control panel: hotkey editor, language selector, recording indicator style."></a>
+  <a href=".github/screenshots/provider-cards.png"><img src=".github/screenshots/provider-cards.png" width="320" alt="Three provider cards stacked: Alibaba Bailian, Deepgram, Soniox — each with API key field, batch/realtime toggle, model picker."></a>
+</p>
+<p align="center"><sub><em>[TODO: control-panel.png] · [TODO: provider-cards.png]</em></sub></p>
+
+### Dictionary + history
+
+<p align="center">
+  <a href=".github/screenshots/dictionary.png"><img src=".github/screenshots/dictionary.png" width="320" alt="Dictionary editor with a table of source → replacement terms, bulk import button, and a 'feed back after correction' toggle."></a>
+  <a href=".github/screenshots/history.png"><img src=".github/screenshots/history.png" width="320" alt="History list of past transcriptions with timestamps, app/window context, and edit-in-place support."></a>
+</p>
+<p align="center"><sub><em>[TODO: dictionary.png] · [TODO: history.png]</em></sub></p>
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart TB
+    subgraph Renderer[Renderer process — React + TypeScript]
+        UI[Control panel<br/>shadcn/ui components]
+        Capsule[Floating capsule<br/>live waveform + scroll]
+        Dict[Dictionary editor]
+        Hist[History viewer]
+    end
+    subgraph Main[Main process — Electron]
+        HK[Global hotkey listener<br/>native binary]
+        Audio[Audio capture<br/>ffmpeg-static]
+        Paste[Smart paste<br/>platform-specific helper]
+        IPC[IPC bridge<br/>preload.js contextBridge]
+        Provider[Provider registry]
+    end
+    subgraph Providers[Providers]
+        Whisper[whipser.cpp<br/>local]
+        Sherpa[sherpa-onnx<br/>local]
+        Bailian[Alibaba Bailian<br/>batch + WebSocket realtime]
+        Deepgram[Deepgram<br/>batch + WS]
+        Soniox[Soniox<br/>batch + WS]
+        Custom[Custom<br/>any OpenAI-compatible]
+    end
+    subgraph Reasoning[Reasoning layer — optional]
+        Cerebras[Cerebras<br/>gpt-oss-120B]
+        Mercury[Mercury 2]
+        Groq[Groq]
+    end
+    UI -->|contextBridge| IPC
+    Capsule -->|contextBridge| IPC
+    HK --> Main
+    Audio --> Main
+    Provider --> Whisper
+    Provider --> Sherpa
+    Provider --> Bailian
+    Provider --> Deepgram
+    Provider --> Soniox
+    Provider --> Custom
+    Provider --> Reasoning
+    Main --> Paste
+    Paste --> OS[Active focused app]
+```
+
+**Hot path**: hotkey press → audio capture → chosen provider → (optional) reasoning pass → paste at the previously focused cursor.
+
+---
+
+## 📦 Features
+
+### 🎙️ Transcription
+
+- 🎤 **Local whisper.cpp** — fully offline transcription, multiple model sizes.
+- 🧠 **Local sherpa-onnx** — alternative offline engine optimized for low-memory hosts.
+- 🌐 **Alibaba Bailian** — first-class provider; batch (`qwen3-asr-flash`) + realtime (`qwen3-asr-flash-realtime`) modes.
+- 🌐 **Deepgram** — first-class provider with independent batch/realtime toggles.
+- 🌐 **Soniox** — first-class provider with independent batch/realtime toggles.
+- 🔧 **Custom OpenAI-compatible** — keep it for any other OpenAI-compatible endpoint; the Bailian legacy path is auto-migrated on first launch.
+- 🌐 **Multi-language ASR** — language hint (ISO 639-1) supported across all providers; auto-detect when unset.
+
+### 🧠 Reasoning (optional post-processing)
+
+- ⚡ **Cerebras `gpt-oss-120B`** — default recommendation for short-text polish (~2,248 t/s).
+- ⚡ **Mercury 2** — alternative low-latency live polisher.
+- ⚡ **Cerebras `Llama-3.1-8B`** — lowest-cost high-throughput option.
+- ⚡ **Groq `Llama-3.3-70B`** — single-key ASR + reasoning from one provider.
+- 🔧 **Any OpenAI-compatible endpoint** — plug in your own; `enable_thinking` toggle surfaces in settings.
+
+### ⌨️ Dictation
+
+- ⌨️ **Global hotkey** — press-and-hold or toggle; default `` ` `` is configurable.
+- 🎯 **Floating capsule** — translucent panel with live waveform tied to actual microphone level.
+- 📜 **Streaming transcript** — single-line continuous scroll, hands off into `Processing...` cleanly.
+- 🚦 **Voice-activity gate** — reduces false-positive transcripts when the mic is open but no speech yet.
+- 📋 **Paste fall-back** — when direct injection is unsafe, the text lands on the clipboard for `⌘V` / `Ctrl+V`.
+
+### 📚 Personalization
+
+- 📖 **Custom dictionary** — per-term source → replacement; bulk import supported.
+- 🔁 **Continuous learning** — accepted corrections feed back into the dictionary automatically.
+- 📜 **History** — searchable list of past transcriptions, with edit-in-place and app/window context.
+- 🎛️ **Profiles** — keep hotkey + provider combos per app or per website (coming roadmap).
+
+### 🌐 Platform & integration
+
+- 🖥️ **Three platforms** — macOS (Intel + Apple Silicon), Windows 10/11, and Linux (AppImage / .deb / .rpm / .tar.gz).
+- 🔌 **Local HTTP / WebSocket helpers** — invisible background services for hotkey + clipboard on each platform.
+- 🔄 **Auto-update channel** — packaged builds receive silent updates; the Control Panel surfaces install prompts.
+- 🌍 **i18n via i18next** — UI strings ship in `en`, `zh-Hans`, `es`, `fr`, `de`, `pt`, `it`.
+
+---
+
+## 🆚 Comparison
+
+| Dimension | Mouthpiece 1.1.6 | Typeless (closed) | MacWhisper | Wispr Flow | OpenWhispr (upstream) |
+|---|---|---|---|---|---|
+| Three-platform desktop | ✅ macOS/Win/Linux | ❌ macOS | ✅ macOS | ❌ macOS | ✅ macOS/Win/Linux |
+| BYOK model | ✅ default | ❌ | ⚠️ partial | ❌ | ✅ |
+| Alibaba Bailian (explicit) | ✅ first-class | ❌ | ❌ | ❌ | ⚠️ via Custom |
+| Deepgram | ✅ first-class | ⚠️ | ✅ | ✅ | ✅ |
+| Soniox | ✅ first-class | ❌ | ❌ | ❌ | ❌ |
+| Local whisper.cpp | ✅ bundled binary | ❌ | ✅ | ❌ | ✅ |
+| Local sherpa-onnx | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Open-source | ✅ MIT | ❌ | ✅ | ❌ | ✅ |
+| Paste fall-back | ✅ explicit | ⚠️ | ⚠️ | ⚠️ | ⚠️ |
+| Live waveform from real mic | ✅ | ⚠️ | ⚠️ | ✅ | ⚠️ |
+
+---
+
+## 🔐 BYOK — what it means here
+
+**Bring Your Own Key** is the default posture: every cloud provider requires the user to paste their own API key. Mouthpiece itself does not bill, hold, or proxy payments.
+
+- **Self-supplied model mode (default)** — you bring the API key for Alibaba Bailian / Deepgram / Soniox / Cerebras / Mercury / Groq / OpenAI-compatible endpoint, and you settle with that provider directly.
+- **Optional hosted account mode** — only enabled if you point Mouthpiece at a self-hosted compatible auth + billing backend (see [BYOK / account mode spec](TROUBLESHOOTING.md)). Out of the box, no account system is required.
+
+Sample provider environment variables (used by the bundled Cerebras / Bailian paths or external compatible clients):
+
+```bash
+# Alibaba Bailian / DashScope (compatible mode)
+DASHSCOPE_API_KEY=your_dashscope_key
+DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+# Model: qwen3-asr-flash  (or qwen3-asr-flash-realtime for streaming)
+
+# Cerebras (default reasoning)
+OPENAI_API_KEY=your_cerebras_key
+OPENAI_BASE_URL=https://api.cerebras.ai/v1
+# Model: gpt-oss-120b
+
+# Mercury 2 (alternative reasoning)
+MERCURY_API_KEY=your_mercury_key
+MERCURY_BASE_URL=https://api.inceptionlabs.ai/v1
+# Model: mercury-2
+```
+
+---
+
+## 🛠️ Build from source
+
+```bash
+git clone https://github.com/NotWizard/Mouthpiece.git
+cd Mouthpiece
+npm install
+npm run dev               # live development
+npm run build:renderer    # compile the React bundle only
+npm run dist              # full multi-platform packaging
+```
+
+| Platform | Build command | Output |
+|---|---|---|
+| macOS (universal) | `npm run build:mac` | `dist/Mouthpiece-1.1.6-mac.dmg`, `.zip` |
+| Windows | `npm run build:win` | `dist/Mouthpiece-Setup-1.1.6.exe`, portable `.exe` |
+| Linux AppImage | `npm run build:linux:appimage` | `dist/Mouthpiece-1.1.6-linux-x86_64.AppImage` |
+| Linux .deb | `npm run build:linux:deb` | `dist/Mouthpiece-1.1.6-linux-amd64.deb` |
+| Linux .rpm | `npm run build:linux:rpm` | `dist/Mouthpiece-1.1.6-linux-x86_64.rpm` |
+| Linux .tar.gz | `npm run build:linux:tar` | `dist/Mouthpiece-1.1.6-linux-x64.tar.gz` |
+
+> For source-tree users on Windows, the `core/` directory ships `Mouthpiece-Launch.vbs` and `Create-Mouthpiece-DesktopShortcut.ps1` to skip the black `.bat` console flash and create a real desktop shortcut.
+
+---
+
+## 🗓️ Roadmap
+
+- [x] **v1.1.0** — Bailian provider detached from the `Custom + DashScope` workaround (auto-migration on startup)
+- [x] **v1.1.1** — Soniox provider card
+- [x] **v1.1.2** — Deepgram provider card
+- [x] **v1.1.3** — Streaming caption single-line continuous scroll
+- [x] **v1.1.4** — Voice-activity gate to suppress false-positive transcripts
+- [x] **v1.1.5** — Backend reasoning routed through Electron main process (avoids renderer networking edge cases)
+- [x] **v1.1.6** — Control-panel install prompts + dropped legacy `usage analytics` opt-in
+- [ ] **v1.2** — Per-app and per-website dictation profiles
+- [ ] **v1.3** — Optional in-app transcribed-text transformation prompt library
+
+> Per-feature plans are documented in `docs/plans/` (see [Project Notes section in this README](#-contributing)).
+
+---
+
+## 🤝 Contributing
+
+Pull requests welcome. Start with:
+
+- **Issues** — please include your OS, Mouthpiece version, and how the provider was configured (BYOK key set or local).
+- **PRs** — match the existing structure: `core/` for cross-platform helpers, `src/services/` for provider implementations, `src/locales/` for translations.
+- **i18n** — `npm run i18n:check` ensures parity across language bundles.
+- **Release** — Run `npm run quality-check && npm run lint` before opening a PR.
+
+This project follows the spirit of the [Contributor Covenant v2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
+
+---
+
+## 🔒 Security
+
+Found a vulnerability? **Do not** file a public issue. See [`SECURITY.md`](SECURITY.md) for the supported-versions table, the disclosure window, and a private contact channel.
+
+Mouthpiece's threat posture:
+
+- **BYOK isolation** — provider keys are stored in the OS-native secrets store (Keychain / Credential Manager / libsecret); not in `process.env` for the renderer.
+- **Renderer hardening** — `contextIsolation: true`, `nodeIntegration: false`, `sandbox: true`; the renderer never gets raw key material.
+- **Main-process proxy** — all cloud calls originate from the main process so the renderer never has direct network trust to third-party ASR endpoints.
+- **Electron Builder hardening** — `hardenedRuntime` + entitlements on macOS; NSIS silent install on Windows.
+
+---
+
+## ⚖️ Legal & Risk Disclosure
+
+1. This project is provided under the **MIT License** without any express or implied warranty.
+2. When you use a cloud model, the data flows through that provider under their terms. Review their privacy and compliance policies yourself.
+3. Speech-to-text and intelligent post-processing may produce errors. Do not use the output in legal, medical, or financial workflows without human review.
+4. This project does not offer investment, medical, or legal advice.
+
+---
+
+## 🪺 Upstream & References
+
+- OpenWhispr origin: <https://github.com/OpenWhispr/openwhispr>
+- VoiceInk origin: <https://github.com/le-soleil-se-couche/VoiceInk>
+- Cerebras Cloud: <https://cloud.cerebras.ai>
+- Cerebras inference docs: <https://inference-docs.cerebras.ai>
+- Cerebras pricing: <https://www.cerebras.ai/pricing>
+- Artificial Analysis (Cerebras): <https://artificialanalysis.ai/providers/cerebras>
+- Alibaba Bailian console (DashScope compatible mode): <https://bailian.console.aliyun.com/>
+
+---
+
+## 📜 License
+
+[MIT](LICENSE) — see [`LICENSE`](LICENSE) for the full text.
+
+---
+
+<div align="center">
+
+<sub>📌 Mouthpiece is a community-maintained fork — not affiliated with Typeless, OpenWhispr cloud services, or VoiceInk commercial offerings. · <a href="https://github.com/NotWizard/Mouthpiece/issues">🐛 Report a bug</a> · <a href="https://github.com/NotWizard/Mouthpiece/discussions">💬 Discuss</a></sub>
+
+</div>
