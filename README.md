@@ -27,7 +27,7 @@ language: zh-Hans
 [![Fork](https://img.shields.io/badge/upstream-OpenWhispr%20%2B%20VoiceInk-informational)](#-upstream--references)
 [![Security](https://img.shields.io/badge/security-policy-lightgrey)](SECURITY.md)
 
-**Languages**: [English](./README.md) · [中文](./README.zh.md)
+**Languages**: [English](./README.md) · [中文](./README.en.md)
 
 [安装](#-安装) · [快速开始](#-快速开始) · [功能](#-功能) · [架构](#-架构) · [BYOK](#-byok--这里的含义) · [贡献](#-贡献)
 
