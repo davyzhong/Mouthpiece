@@ -863,7 +863,7 @@ final class DictationCoordinatorTests: XCTestCase {
         harness.insertion.insertOverride = { text, _, _ in probe.record(text) }
 
         var settings = makeSettings()
-        settings.useReasoningModel = true               // route finalize through the reasoning POST
+        settings.useReasoningModel = true // route finalize through the reasoning POST
         settings.automaticallyPasteTranscription = true // default; completion runs through inserting
 
         await harness.coordinator.start(settings: settings)
