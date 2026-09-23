@@ -1,3 +1,5 @@
+> ⚠️ 本翻译最后更新于 2026-09-21，主 README 于 2026-09-23 有多项修复未同步至此；最新内容以 [主文档](./README.md) 为准。
+
 ---
 name: Mouthpiece
 description: Cross-platform desktop dictation for macOS, Windows, and Linux. BYOK by default — pick your own transcription (Alibaba Bailian / Deepgram / Soniox) and reasoning (Cerebras / Mercury / Groq) providers, or run fully local with whisper.cpp and sherpa-onnx.
