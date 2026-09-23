@@ -112,7 +112,7 @@ npm run dev          # 开发模式，热更新
 4. *（可选）* 在「润色」里设置 Cerebras / Mercury / Groq 的 OpenAI-compatible endpoint，对转录做后处理。
 5. 按热键 → 说话 → 松手。转录文字出现在光标处。
 
-> Provider 配置示例：[`LOCAL_WHISPER_SETUP.md`](LOCAL_WHISPER_SETUP.md)（本地）、[`TROUBLESHOOTING.md`](TROUBLESHOOTING.md)（通用）、[`WINDOWS_TROUBLESHOOTING.md`](WINDOWS_TROUBLESHOOTING.md)。
+> Provider 配置示例：LOCAL_WHISPER_SETUP.md（待补，本地）、[`TROUBLESHOOTING.md`](TROUBLESHOOTING.md)（通用）、WINDOWS_TROUBLESHOOTING.md（待补）。
 
 ---
 
