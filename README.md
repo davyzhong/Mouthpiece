@@ -17,14 +17,16 @@ language: zh-Hans
 
 # Mouthpiece
 
+![GitHub Stars](https://img.shields.io/github/stars/davyzhong/Mouthpiece) ![Git Tag 版本](https://img.shields.io/github/v/tag/davyzhong/Mouthpiece)
+
 **跨平台桌面听写工具 — 默认 BYOK，可全程本地运行。**
 
 按下热键 → 说话 → 自动粘贴到光标处。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/macOS%20%7C%20Windows%20%7C%20Linux-3%20平台-lightgrey)](https://github.com/NotWizard/Mouthpiece/releases)
-[![Version](https://img.shields.io/badge/version-1.1.6-success)](https://github.com/NotWizard/Mouthpiece/releases)
-[![Fork](https://img.shields.io/badge/upstream-OpenWhispr%20%2B%20VoiceInk-informational)](#-upstream--references)
+[![Version 版本](https://img.shields.io/badge/version-1.1.6-success)](https://github.com/NotWizard/Mouthpiece/releases)
+[![上游 Fork 信息](https://img.shields.io/badge/upstream-OpenWhispr%20%2B%20VoiceInk-informational)](#-upstream--references)
 [![Security](https://img.shields.io/badge/security-policy-lightgrey)](SECURITY.md)
 
 **Languages**: [English](./README.md) · [中文](./README.en.md)
