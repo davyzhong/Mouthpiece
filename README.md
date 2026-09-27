@@ -112,7 +112,7 @@ npm run dev          # 开发模式，热更新
 4. *（可选）* 在「润色」里设置 Cerebras / Mercury / Groq 的 OpenAI-compatible endpoint，对转录做后处理。
 5. 按热键 → 说话 → 松手。转录文字出现在光标处。
 
-> Provider 配置示例：LOCAL_WHISPER_SETUP.md（待补，本地）、[`TROUBLESHOOTING.md`](TROUBLESHOOTING.md)（通用）、WINDOWS_TROUBLESHOOTING.md（待补）。
+排障见 [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md)。本地 Whisper 与 Windows 的专项配置文档尚未编写。
 
 ---
 
@@ -370,6 +370,13 @@ Mouthpiece 的威胁姿态：
 - 阿里云百炼控制台（DashScope 兼容模式）: <https://bailian.console.aliyun.com/>
 
 ---
+
+## 🙏 致谢
+
+- **方法论**：本 README 的结构与自检口径遵循 [readme-craft](https://github.com/davyzhong/readme-craft) ——
+  19 条铁律 + 13 条反模式，规则以 `rules.yaml` 为单一事实源，可用 `npx github:davyzhong/readme-craft check .` 复验。
+- **贡献**：欢迎通过 Issue 与 PR 参与，具体流程见下方贡献章节。
+- **赞助**：本项目暂无商业赞助。若希望支持维护，请优先贡献 Issue、PR 或文档改进。
 
 ## 📜 License
 
