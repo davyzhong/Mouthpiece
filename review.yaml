@@ -1,0 +1,100 @@
+# Mouthpiece README 的 agent-reviewed 规则评审
+#
+# 评审对象：./README.md（391 行，version 1.1.6）
+# 评审时间：2026-09-27
+# 项目类型：desktop（Electron 跨平台桌面应用）
+# 用法：pnpm readme-craft check . --type desktop --review review.yaml
+#
+# 说明：本项目是 OpenWhispr 与 VoiceInk 的社区延续版（fork），
+# 继承了上游用户基础，但 README 未提供可溯源的外部用户引用，
+# T11 按 N/A 处理而非引用无法验证的背书。
+
+specVersion: 3.0.0-alpha.0
+
+reviews:
+  # T01 视觉锤
+  - id: T01
+    score: 3
+    reason: >-
+      居中标题、版本 badge（含上游 fork 信息）、语言切换与截图区块标题齐备，
+      首屏信息完整。
+      扣 2 分：首屏无实际可看的视觉——「它跑起来长什么样」章节的界面截图
+      仍为 `[TODO]` 占位。对以「真实波形悬浮胶囊」为核心卖点的 GUI 应用，
+      缺少界面截图使这一卖点无法被读者直接验证。
+    evidence: [logo-tagline]
+
+  # T02 三秒价值主张
+  - id: T02
+    score: 5
+    reason: >-
+      首屏第 40 行一句话给出定位与边界：社区对 OpenWhispr 与 VoiceInk 的延续，
+      专注粘贴回退、悬浮胶囊真实波形、词典回流与显式 BYOK provider 集成，
+      并点名支持的 provider（阿里百炼 / Deepgram / Soniox + OpenAI-compatible）。
+      做什么、给谁用、独特优势（BYOK 无订阅锁定）三要素完整且可核实。
+    evidence: [value-proposition]
+
+  # T04 安装路径
+  - id: T04
+    score: 5
+    reason: >-
+      安装章节分 macOS / Windows / Linux 三节，各自给出可直接执行的命令或操作：
+      macOS 打开 .dmg 拖入 Applications、Windows 运行 NSIS 安装包、
+      Linux 给出 AppImage 的 chmod + 执行。版本号（1.1.6）在命令中保持一致，
+      覆盖全部正式支持的平台形态，无未验证承诺。
+    evidence: [executable-command, supported-platforms]
+
+  # T05 Quickstart
+  - id: T05
+    score: 4
+    reason: >-
+      安装后有独立的快速开始章节，且首屏导航把「安装」与「快速开始」并列，
+      读者路径清晰；BYOK 章节解释 provider key 的配置含义。
+      扣 1 分：无在线 Demo 或一键试用入口，首次验证需完整下载安装包。
+    evidence: [quickstart-steps]
+
+  # T07 卖点编号
+  - id: T07
+    score: 5
+    reason: >-
+      「为什么选 Mouthpiece」7 条，每条均为「粗体关键词 + 具体机制 + 可验证细节」：
+      BYOK 说明结算关系（你向 provider 结算）、三平台列出全部打包格式
+      （.dmg/.zip、NSIS + 便携 .exe、AppImage/.deb/.rpm/.tar.gz）、波形说明
+      随实际麦克风电平脉动、粘贴回退列出被拦截的具体场景（Terminal 密码提示、
+      1Password、密码字段）、词典说明回流机制、provider 说明独立卡片与独立 key。
+      第 1 条直接说明「无订阅锁定、无中心化 SaaS」，差异点明确。
+    evidence: [numbered-selling-points, quantified-benefit]
+
+  # T08 Feature 分组
+  - id: T08
+    score: 4
+    reason: >-
+      功能、架构、BYOK、上游与参考分章组织，另有独立的安装与平台章节，
+      跨平台项目的读者可按平台快速定位。
+      扣 1 分：功能章节未标注各 provider 的成熟度或推荐场景，
+      读者需自行判断该选哪个 provider。
+    evidence: [feature-groups]
+
+  # T11 引用/背书
+  - id: T11
+    status: na
+    reason: >-
+      作为 fork 虽继承上游用户基础，但 README 未提供可溯源的引用来源
+      （无具体用户 quote、无授权 logo、无外部案例链接）。
+      按 N/A 处理；引用无法验证的上游背书会违反 T11 的反虚假约束。
+
+  # T14 包容性语言
+  - id: T14
+    score: 5
+    reason: >-
+      全文使用「你」等第二人称口语化表达，无 he/she 默认指代、无性别化或地域化表述；
+      provider 名称与技术术语均附中文说明，跨文化读者可理解。
+    evidence: [inclusive-language-review]
+
+  # T17 默认语言策略
+  - id: T17
+    score: 5
+    reason: >-
+      首屏第 32 行提供语言切换 [中文](./README.md) · [English](./README.en.md)，
+      且 README.en.md 真实存在。考虑到项目延续英文社区项目、
+      用户可能跨语言，默认中文 + 提供英文入口的策略合理且可执行。
+    evidence: [default-language-rationale]
